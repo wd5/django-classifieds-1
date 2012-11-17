@@ -1,0 +1,16 @@
+{% extends "classifieds/classifieds.html" %}
+
+{% block content %}
+    <div class="container">
+    	<div class="row">
+    		<div class="span3">
+    			{% include 'classifieds/common/categories.html' with categories=categories %}
+    		</div>
+    		<div class="span9">
+    			<div id="content">
+    				{% include 'classifieds/common/posts.html' with posts=posts %}
+    			</div>
+    		</div>
+    	</div>
+    </div>
+{% endblock %}

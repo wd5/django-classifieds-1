@@ -1,0 +1,71 @@
+{% extends "classifieds/classifieds.html" %}
+
+{% load bootstrap %}
+{% load staticfiles %}
+
+{% block header_code %}
+	{{ form.media }}
+	<link rel="stylesheet" href="{% static 'css/edit.css' %}">
+	
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+    	<div class="row">
+    		<div class="span8">
+    			<div class="well">
+	    			<form action="" method="post">
+			    		{{ form|bootstrap }}
+			    		<div class="form-actions">
+							{% csrf_token %}
+							{% for hidden in form.hidden_fields %}
+			    				{{ hidden }}
+			    			{% endfor %}
+							<input type="submit" value="submit">
+						</div>
+					</form>
+				</div>
+    		</div>
+    		<div class="span4">
+    			<div class="well">
+    				<form action="{% url classifieds-ajax-image-upload %}" id="image-upload-form" method="post" enctype="multipart/form-data">
+    					{{ image_upload_form|bootstrap }}
+    					<div class="form-actions">
+							{% csrf_token %}
+							{% for hidden in form.hidden_fields %}
+			    				{{ hidden }}
+			    			{% endfor %}
+							<input type="submit" value="submit">
+						</div>
+					</form>
+	    		</div>
+	    		<div class="well" id="post-images">
+	    		    {% for image in images %}
+                        <img src="{{ image.x100.url }}" data-x450="{{ image.x450.url }}" />
+	    		    {% empty %}
+	    		    {% endfor %}
+	    		</div>
+    		</div>
+    	</div>
+    </div>
+{% endblock %}
+
+{% block footer_code %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery/plugins/jquery.form.js"></script>
+    <script type="text/javascript">
+        jQuery(function(){
+            $('#image-upload-form').ajaxForm({
+                success:function(data){
+                    $('<img>')
+                        .attr('src', data.image.x100)
+                        .data('x450', data.image.x450)
+                        .prependTo('#post-images');
+                }
+            });
+
+            $('#post-images').find('img').live('click', function(){
+                tinymce.execCommand('mceInsertContent', false, '<img src="'+$(this).data('x450')+'" alt="" class="post-image" />');                
+            })
+        });
+    </script>
+{% endblock %}
