@@ -30,6 +30,11 @@ def image_upload_to( instance, filename ):
 class ClassifiedsCategory( CommonCategory ):
     pass
 
+IN_STOCK_CHOICES = ( 
+    ( 'in_stock', 'in stock', ),
+    ( 'in_stock', 'in stock', ),
+ )
+
 class ClassifiedsPost( CommonPost ):
     category = models.ManyToManyField( 
         ClassifiedsCategory,
@@ -58,6 +63,11 @@ class ClassifiedsPost( CommonPost ):
     google_plus = models.URLField( 
         blank = True,
         help_text = u'full URL to your account with http://',
+    )
+    in_stock = models.CharField( 
+        max_length = 15,
+        choices = IN_STOCK_CHOICES,
+        default = 'active',
     )
 
 class ClassifiedsPostImages( CommonPostImage ):
