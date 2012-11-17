@@ -8,7 +8,7 @@ from . models import ClassifiedsPost, ClassifiedsCategory, ClassifiedsPostImages
 class ClassifiedsEditForm( CommonPostEditForm ):
     category = forms.ModelMultipleChoiceField( 
         queryset = ClassifiedsCategory.objects.all(),
-        required = False,
+        required = True,
         widget = FilteredSelectMultiple( 
             'categories',
             False,
@@ -16,23 +16,21 @@ class ClassifiedsEditForm( CommonPostEditForm ):
     )
 
     class Meta( CommonPostEditForm.Meta ):
+        model = ClassifiedsPost
         fields = ( 
             'title',
             'content',
             'category',
-            'country',
-            'city',
             'site',
             'email',
             'phone',
-            'address',
             'skype',
             'google_plus',
             'facebook',
             'twitter',
             'tags',
         )
-        model = ClassifiedsPost
+
 
 
 class ImageUploadForm( forms.ModelForm ):

@@ -123,6 +123,7 @@ def post( request, id, slug = None ):
 
 @login_required
 def edit( request, id ):
+
     id = int( id )
 
     try:
@@ -130,11 +131,17 @@ def edit( request, id ):
     except ClassifiedsPost.DoesNotExist:
         raise Http404
 
+    log( id )
+    images = ClassifiedsPostImages.objects.filter( post = post )
+
     form = ClassifiedsEditForm( instance = post )
+
+#    log( form )
 
     if request.method == "POST":
         form = ClassifiedsEditForm( request.POST, instance = post )
-        if form.is_valid:
+        log( form )
+        if form.is_valid():
             form.save()
             post.status = 'active'
             post.save()
@@ -143,7 +150,7 @@ def edit( request, id ):
 
             return redirect( 'classifieds-post', id = id )
 
-    images = ClassifiedsPostImages.objects.filter( post = post )
+
 
     data = {
         'post':post,
@@ -152,24 +159,3 @@ def edit( request, id ):
         'images':images,
     }
     return render( request, 'classifieds/edit.html', data )
-
-def file( request ):
-
-    post = ClassifiedsPostImages.objects.get( pk = 1 )
-
-    if request.method == "POST":
-        form = ImageUploadForm( request.POST, request.FILES )
-        if form.is_valid:
-            form.save()
-    else:
-        form = ImageUploadForm( initial = {'post':post} )
-
-
-    images = ClassifiedsPostImages.objects.filter( post = 1 )
-
-    data = {
-        'form':form,
-        'images':images,
-    }
-    return render( request, 'classifieds/file.html', data )
-

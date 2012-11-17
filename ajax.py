@@ -12,24 +12,14 @@ def image_upload( request ):
 
     id = int( request.POST['post'] )
 
-#    import logging
-#    # Get an instance of a logger
-#    logger = logging.getLogger()
-#    logger.debug( request.POST['post'] )
-#    logger.debug( id )
-
-
-
     try:
         post = ClassifiedsPost.objects.get( pk = id )
     except ClassifiedsPost.DoesNotExist:
         raise Http404
 
-#    logger.debug( post )
-
     if request.method == "POST":
         form = ImageUploadForm( request.POST, request.FILES )
-        if form.is_valid:
+        if form.is_valid():
             image = form.save()
 
     data = {
