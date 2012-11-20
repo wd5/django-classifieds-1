@@ -12,34 +12,16 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from . models import ClassifiedsPost, ClassifiedsCategory, ClassifiedsPostImages
 from . forms import ClassifiedsEditForm, ImageUploadForm
 from common.utils import log
-from location.models import Country, City
 
 
 def get_categories():
     return ClassifiedsCategory.objects.get_query_set()
 
-def get_countries( category = None ):
-#    log( category )
-    if category:
-        cots = ClassifiedsPost.objects.filter( category = category ).values_list( 'country' ).distinct()
-    else:
-        cots = ClassifiedsPost.objects.values_list( 'country' ).distinct()
-#    log( cots )
-    countries = Country.objects.filter( pk__in = cots )
-#    log( countries )
-    return countries
-
-def get_posts( category = None, country = None, city = None, page = None ):
+def get_posts( category = None, page = None ):
     posts = ClassifiedsPost.objects.filter( status = 'active' )
 
     if category:
         posts = posts.filter( category = category )
-
-    if country:
-        posts = posts.filter( country = country )
-
-    if city:
-        posts = posts.filter( city = city )
 
     paginator = Paginator( posts, 7 )
 
@@ -54,21 +36,19 @@ def get_posts( category = None, country = None, city = None, page = None ):
 
     return posts
 
-def home( request, country = None, city = None, page = None ):
+def home( request, page = None, ):
 
-    countries = get_countries()
     categories = get_categories()
-    posts = get_posts( country = country, city = city, page = page )
+    posts = get_posts( page = page )
 
     data = {
-        'countries' : countries,
         'categories' : categories,
         'posts' : posts,
     }
     return render( request, 'classifieds/home.html', data )
 
 
-def category( request, id, slug = None, country = None, city = None, page = None ):
+def category( request, id, slug = None, page = None ):
 
     id = int( id )
 
@@ -80,15 +60,13 @@ def category( request, id, slug = None, country = None, city = None, page = None
     if category.slug() != slug:
         return redirect( 'classifieds-category', id = id, slug = category.slug(), permanent = True )
 
-    countries = get_countries( category )
     categories = get_categories()
-    posts = get_posts( category = category, country = country, city = city, page = page )
+    posts = get_posts( category = category, page = page )
 
     data = {
         'category':category,
         'posts':posts,
         'categories':categories,
-        'countries' : countries,
     }
 
     return render( request, 'classifieds/home.html', data )
@@ -131,16 +109,12 @@ def edit( request, id ):
     except ClassifiedsPost.DoesNotExist:
         raise Http404
 
-    log( id )
     images = ClassifiedsPostImages.objects.filter( post = post )
 
     form = ClassifiedsEditForm( instance = post )
 
-#    log( form )
-
     if request.method == "POST":
         form = ClassifiedsEditForm( request.POST, instance = post )
-        log( form )
         if form.is_valid():
             form.save()
             post.status = 'active'
@@ -149,8 +123,6 @@ def edit( request, id ):
             del request.session['classifieds-draft-id']
 
             return redirect( 'classifieds-post', id = id )
-
-
 
     data = {
         'post':post,

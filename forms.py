@@ -21,6 +21,7 @@ class ClassifiedsEditForm( CommonPostEditForm ):
             'title',
             'content',
             'category',
+            'in_stock',
             'site',
             'email',
             'phone',

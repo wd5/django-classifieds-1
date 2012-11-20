@@ -9,17 +9,8 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, Adjust, SmartResize, ResizeToFit
 
 from common.models import CommonCategory, CommonPost, CommonPostImage
-from location.models import Country, City
 
 # Create your models here.
-
-#META_CHOICE = (
-#    ( 'email', 'email' ),
-#    ( 'phone', 'phone' ),
-#    ( 'skype', 'skype' ),
-#    ( 'facebook', 'facebook' ),
-#
-# )
 
 def image_upload_to( instance, filename ):
     ext = filename.split( '.' )[-1]
@@ -32,7 +23,7 @@ class ClassifiedsCategory( CommonCategory ):
 
 IN_STOCK_CHOICES = ( 
     ( 'in_stock', 'in stock', ),
-    ( 'in_stock', 'in stock', ),
+    ( 'on_request', 'on request', ),
  )
 
 class ClassifiedsPost( CommonPost ):
