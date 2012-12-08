@@ -5,8 +5,5 @@
 			<p>{{ post.snippet }}</p>
 		</div>
 	{% empty %}
-        <div class="alert alert-info">
-            {% trans 'no entries' %}
-        </div>
-        {% include 'common/google-search.html' %}
+        {% include 'common/no-entries.html' %}        
 	{% endfor %}
