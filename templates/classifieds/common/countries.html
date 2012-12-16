@@ -4,9 +4,9 @@
     	{% for country in countries  %}
     	   <li>
     	       {% if category %}
-    	           <a href="{% url classifieds-category id=category.id slug=category.slug country=country.id %}">{{ country.name }}</a>    	           
+    	           <a href="{% url 'classifieds-category' id=category.id slug=category.slug country=country.id %}">{{ country.name }}</a>
     	       {% else %}
-    	           <a href="{% url classifieds-home country=country.id %}">{{ country.name }}</a>
+    	           <a href="{% url 'classifieds-home' country=country.id %}">{{ country.name }}</a>
     	       {% endif %}
     	   </li>
     	{% endfor %}

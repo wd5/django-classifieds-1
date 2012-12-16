@@ -28,7 +28,7 @@
     		</div>
     		<div class="span4">
     			<div class="well">
-    				<form action="{% url classifieds-ajax-image-upload %}" id="image-upload-form" method="post" enctype="multipart/form-data">
+    				<form action="{% url 'classifieds-ajax-image-upload' %}" id="image-upload-form" method="post" enctype="multipart/form-data">
     					{{ image_upload_form|bootstrap }}
     					<div class="form-actions">
 							{% csrf_token %}

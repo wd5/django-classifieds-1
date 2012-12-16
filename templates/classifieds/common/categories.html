@@ -4,7 +4,7 @@
     	{% if categories %}
             {% recursetree categories %}
                 <li>
-                    <a href="{% url classifieds-category id=node.id slug=node.slug %}">{{ node.title }}</a>
+                    <a href="{% url 'classifieds-category' id=node.id slug=node.slug %}">{{ node.title }}</a>
                     {% if not node.is_leaf_node %}
                         <ul class="children">
                             {{ children }}
