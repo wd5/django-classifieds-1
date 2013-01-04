@@ -1,12 +1,19 @@
-<div id="categories">
+<div id="categories" class="side-nav">
     {% load mptt_tags %}
-    <ul>
-    	{% if categories %}
+    <ul class="nav nav-list">
+        {% if categories %}
             {% recursetree categories %}
-                <li>
+                <li
+                    id="category-{{ node.id }}"
+                    {% if category %}
+                        {% if category.id == node.id %}
+                    class="active"
+                        {% endif %}
+                    {% endif %}
+                    >
                     <a href="{% url 'classifieds-category' id=node.id slug=node.slug %}">{{ node.title }}</a>
                     {% if not node.is_leaf_node %}
-                        <ul class="children">
+                        <ul class="nav nav-list children level-{{ node.level }}" style="display: none;">
                             {{ children }}
                         </ul>
                     {% endif %}
